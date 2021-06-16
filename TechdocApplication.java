@@ -1,7 +1,3 @@
-package org.pratik.techdoc;
-
-
-
 public class TechdocApplication {
 	
 	public static void main(String[] args) {
