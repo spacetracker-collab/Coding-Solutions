@@ -1,4 +1,4 @@
-public class TechdocApplication {
+public class ComplexNumberAddition {
 	
 	public static void main(String[] args) {
 		
