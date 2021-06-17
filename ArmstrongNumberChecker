@@ -1,0 +1,35 @@
+public class ArmstrongNumberChecker{
+
+     public static void main(String []args){
+       
+        System.out.println(ArmstrongNumberChecker.checkArmtrongNumber("-1"));
+       
+     }
+     
+     public static boolean checkArmtrongNumber(String number) {
+           
+            int armstrongNumber  = 0;
+            if ("0".equals(number) )
+                return true;
+            if (Integer.parseInt(number) < 0)
+            return false;
+           
+            for(int i =0 ; i< number.length(); i++){
+                System.out.println(number.charAt(i)) ;
+               
+                char c = number.charAt(i);
+                char[]c1 = new char[1];
+                c1[0] = c;
+                String s = new String(c1);
+                Integer a = Integer.parseInt(s);
+               
+                armstrongNumber = armstrongNumber + (a * a * a);
+            }
+           
+            if(Integer.parseInt(number) == armstrongNumber){
+                return true;
+            } else {
+                return false;
+            }
+     }
+}
