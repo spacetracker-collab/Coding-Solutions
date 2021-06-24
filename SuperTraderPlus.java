@@ -1,3 +1,4 @@
+//Same as SuperTrader but enhanced with quantity and brokerage
 public class SuperTraderPlus {
 
     public static void main(String[] args) {
