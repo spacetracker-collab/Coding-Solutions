@@ -32,7 +32,7 @@ public class SuperTraderPlus {
         if (prices.length > 1) {
             for (int i = 0; i < prices.length; i++) {
 
-                for (int j = 1; j < prices.length; j++) {
+                for (int j = (i+ 1); j < prices.length; j++) {
                     if (prices[i] < prices[j]) {
                         profitDayFlag = true;
 
