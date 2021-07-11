@@ -1,5 +1,3 @@
-package dee;
-
 public class ComplexNumberArithmeticMatrixMultiplication {
 
     public static void main(String[] args) {
