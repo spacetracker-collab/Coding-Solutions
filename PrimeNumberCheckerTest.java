@@ -56,6 +56,13 @@ public class PrimeNumberCheckerTest {
         assertTrue(PrimeNumberChecker.isPrime(104729));
     }
 
+    @Test(timeout = 5000)
+    public void testIntegerMaxValue() {
+        // Integer.MAX_VALUE (2,147,483,647) is prime
+        // This also verifies no integer overflow in i*i loop condition
+        assertTrue(PrimeNumberChecker.isPrime(Integer.MAX_VALUE));
+    }
+
     @Test
     public void testEvenNumbers() {
         assertFalse(PrimeNumberChecker.isPrime(4));
