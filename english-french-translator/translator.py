@@ -10,6 +10,18 @@ import sys
 
 from transformers import pipeline
 
+MODEL_NAME = "Helsinki-NLP/opus-mt-en-fr"
+
+_translator = None
+
+
+def get_translator():
+    """Return the cached translation pipeline, loading it on first call."""
+    global _translator  # noqa: PLW0603
+    if _translator is None:
+        _translator = pipeline("translation_en_to_fr", model=MODEL_NAME)
+    return _translator
+
 
 def translate_english_to_french(text: str) -> str:
     """Translate English text to French using Helsinki-NLP/opus-mt-en-fr model.
@@ -20,7 +32,7 @@ def translate_english_to_french(text: str) -> str:
     Returns:
         Translated French text.
     """
-    translator = pipeline("translation_en_to_fr", model="Helsinki-NLP/opus-mt-en-fr")
+    translator = get_translator()
     result = translator(text)
     return result[0]["translation_text"]
 
