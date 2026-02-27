@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: english-french-translator
+  labels:
+    app: english-french-translator
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: english-french-translator
+  template:
+    metadata:
+      labels:
+        app: english-french-translator
+    spec:
+      containers:
+        - name: translator
+          image: spacetracker/english-french-translator:latest
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "250m"
+            limits:
+              memory: "2Gi"
+              cpu: "1000m"
+          command: ["python", "translator.py", "--interactive"]
+          stdin: true
+          tty: true
