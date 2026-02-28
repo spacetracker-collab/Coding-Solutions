@@ -590,7 +590,8 @@ class StaleResourceDetector:
             "PersistentVolumeClaim": lambda: self.core_v1.delete_namespaced_persistent_volume_claim(name, namespace),
             "Service": lambda: self.core_v1.delete_namespaced_service(name, namespace),
             "Job": lambda: self.batch_v1.delete_namespaced_job(
-                name, namespace, propagation_policy="Background"
+                name, namespace,
+                body=client.V1DeleteOptions(propagation_policy="Background"),
             ),
             "ReplicaSet": lambda: self.apps_v1.delete_namespaced_replica_set(name, namespace),
         }
