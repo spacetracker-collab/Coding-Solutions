@@ -1,0 +1,21 @@
+apiVersion: v2
+name: kubewise-operator
+description: >
+  KubeWise Operator - Kubernetes Intelligent Stale Resource Cleanup Operator.
+  Detects, reports, and cleans up orphaned ConfigMaps, Secrets, PVCs, Services,
+  Jobs, and ReplicaSets using CRD-based policies.
+type: application
+version: 0.1.0
+appVersion: "0.1.0"
+home: https://github.com/spacetracker-collab/kubewise-operator
+sources:
+  - https://github.com/spacetracker-collab/kubewise-operator
+maintainers:
+  - name: KubeWise Contributors
+keywords:
+  - kubernetes
+  - operator
+  - cleanup
+  - stale-resources
+  - cluster-hygiene
+  - finops

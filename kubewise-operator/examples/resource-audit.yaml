@@ -1,0 +1,23 @@
+# Example: On-demand resource audit
+# Creates a one-time scan of the cluster to find stale resources.
+# Results are stored in the status field of this resource.
+apiVersion: kubewise.io/v1alpha1
+kind: ResourceAudit
+metadata:
+  name: weekly-audit
+  namespace: kubewise-system
+spec:
+  # Scan all namespaces except system ones
+  excludedNamespaces:
+    - kube-system
+    - kube-public
+    - kube-node-lease
+
+  # Scan all supported resource types
+  scanTypes:
+    - ConfigMap
+    - Secret
+    - PersistentVolumeClaim
+    - Service
+    - Job
+    - ReplicaSet

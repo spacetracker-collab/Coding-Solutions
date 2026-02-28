@@ -1,0 +1,158 @@
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: cleanuppolicies.kubewise.io
+  annotations:
+    description: "Defines rules for detecting and cleaning up stale Kubernetes resources"
+spec:
+  group: kubewise.io
+  names:
+    kind: CleanupPolicy
+    listKind: CleanupPolicyList
+    plural: cleanuppolicies
+    singular: cleanuppolicy
+    shortNames:
+      - cp
+      - cleanup
+    categories:
+      - kubewise
+  scope: Namespaced
+  versions:
+    - name: v1alpha1
+      served: true
+      storage: true
+      schema:
+        openAPIV3Schema:
+          type: object
+          description: >
+            CleanupPolicy defines rules for detecting and optionally cleaning up
+            stale/orphaned Kubernetes resources in the cluster.
+          properties:
+            apiVersion:
+              type: string
+            kind:
+              type: string
+            metadata:
+              type: object
+            spec:
+              type: object
+              description: "Specification of the cleanup policy"
+              properties:
+                dryRun:
+                  type: boolean
+                  default: true
+                  description: >
+                    When true, only detect and report stale resources without deleting them.
+                    Defaults to true for safety.
+                targetNamespaces:
+                  type: array
+                  description: >
+                    List of namespaces to scan. If empty, all namespaces are scanned
+                    (except those in excludedNamespaces).
+                  items:
+                    type: string
+                excludedNamespaces:
+                  type: array
+                  description: >
+                    Namespaces to exclude from scanning. Defaults to system namespaces.
+                  default:
+                    - kube-system
+                    - kube-public
+                    - kube-node-lease
+                  items:
+                    type: string
+                protectedLabels:
+                  type: object
+                  description: >
+                    Resources with any of these label key-value pairs will never be
+                    flagged as stale or deleted. Use this to protect important resources.
+                  additionalProperties:
+                    type: string
+                resources:
+                  type: array
+                  description: "List of resource rules to apply"
+                  items:
+                    type: object
+                    properties:
+                      kind:
+                        type: string
+                        description: >
+                          The kind of resource to check. Supported values:
+                          ConfigMap, Secret, PersistentVolumeClaim, Service, Job, ReplicaSet
+                        enum:
+                          - ConfigMap
+                          - Secret
+                          - PersistentVolumeClaim
+                          - Service
+                          - Job
+                          - ReplicaSet
+                      maxAgeHours:
+                        type: integer
+                        default: 168
+                        description: >
+                          Maximum age in hours before a resource is considered stale.
+                          Default is 168 hours (7 days).
+                        minimum: 1
+                      conditions:
+                        type: array
+                        description: "Additional conditions for staleness (e.g., 'orphaned', 'unused')"
+                        items:
+                          type: string
+                    required:
+                      - kind
+              required:
+                - resources
+            status:
+              type: object
+              description: "Status of the cleanup policy"
+              properties:
+                phase:
+                  type: string
+                  description: "Current phase (Active, Error)"
+                lastReconciled:
+                  type: string
+                  format: date-time
+                  description: "Timestamp of last reconciliation"
+                staleResourcesFound:
+                  type: integer
+                  description: "Number of stale resources found in last scan"
+                resourcesCleaned:
+                  type: integer
+                  description: "Number of resources cleaned in last scan"
+                staleResources:
+                  type: array
+                  description: "List of stale resources found (limited to 50)"
+                  items:
+                    type: object
+                    properties:
+                      kind:
+                        type: string
+                      name:
+                        type: string
+                      namespace:
+                        type: string
+                      reason:
+                        type: string
+                      age:
+                        type: string
+      subresources:
+        status: {}
+      additionalPrinterColumns:
+        - name: Phase
+          type: string
+          jsonPath: .status.phase
+        - name: Dry-Run
+          type: boolean
+          jsonPath: .spec.dryRun
+        - name: Stale Found
+          type: integer
+          jsonPath: .status.staleResourcesFound
+        - name: Cleaned
+          type: integer
+          jsonPath: .status.resourcesCleaned
+        - name: Last Reconciled
+          type: string
+          jsonPath: .status.lastReconciled
+        - name: Age
+          type: date
+          jsonPath: .metadata.creationTimestamp

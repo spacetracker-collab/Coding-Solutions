@@ -1,0 +1,16 @@
+.git
+.github
+__pycache__
+*.pyc
+*.pyo
+.env
+.venv
+docs/
+examples/
+deploy/
+config/
+tests/
+*.md
+LICENSE
+Makefile
+.gitignore
