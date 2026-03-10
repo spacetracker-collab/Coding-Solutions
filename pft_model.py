@@ -25,7 +25,7 @@ class PreferenceFieldNet(nn.Module):
         return grad
 
 
-   def get_gradient(self, x):
+    def get_gradient(self, x):
         """
         Implementation of the Gradient Decision Principle (Section 3).
         Calculates ∇P(x), the direction of steepest preference increase.
