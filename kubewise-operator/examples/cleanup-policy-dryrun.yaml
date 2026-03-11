@@ -1,0 +1,41 @@
+# Example: Dry-run cleanup policy that scans all namespaces
+# This policy will ONLY report stale resources without deleting them.
+apiVersion: kubewise.io/v1alpha1
+kind: CleanupPolicy
+metadata:
+  name: cluster-hygiene-dryrun
+  namespace: kubewise-system
+spec:
+  # Safety first: dry-run mode only reports, does not delete
+  dryRun: true
+
+  # Scan all namespaces except system ones
+  excludedNamespaces:
+    - kube-system
+    - kube-public
+    - kube-node-lease
+    - kubewise-system
+
+  # Protect resources with these labels from being flagged
+  protectedLabels:
+    kubewise.io/protect: "true"
+
+  # Define what to scan and staleness thresholds
+  resources:
+    - kind: ConfigMap
+      maxAgeHours: 168       # 7 days unreferenced
+
+    - kind: Secret
+      maxAgeHours: 336       # 14 days unreferenced
+
+    - kind: PersistentVolumeClaim
+      maxAgeHours: 168       # 7 days unmounted
+
+    - kind: Service
+      maxAgeHours: 72        # 3 days with no endpoints
+
+    - kind: Job
+      maxAgeHours: 48        # 2 days after completion
+
+    - kind: ReplicaSet
+      maxAgeHours: 168       # 7 days with 0 replicas

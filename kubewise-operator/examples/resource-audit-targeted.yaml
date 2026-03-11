@@ -1,0 +1,16 @@
+# Example: Targeted audit for specific namespaces and resource types
+# Useful for investigating a specific namespace or resource type.
+apiVersion: kubewise.io/v1alpha1
+kind: ResourceAudit
+metadata:
+  name: dev-pvc-audit
+  namespace: kubewise-system
+spec:
+  # Only scan the dev namespace
+  targetNamespaces:
+    - dev
+
+  # Only scan PVCs and Jobs
+  scanTypes:
+    - PersistentVolumeClaim
+    - Job

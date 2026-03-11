@@ -1,0 +1,41 @@
+# Example: Active cleanup policy for a specific namespace
+# WARNING: This policy WILL delete stale resources. Use with caution.
+apiVersion: kubewise.io/v1alpha1
+kind: CleanupPolicy
+metadata:
+  name: dev-namespace-cleanup
+  namespace: kubewise-system
+spec:
+  # Active mode: will actually delete stale resources
+  dryRun: false
+
+  # Only scan the 'dev' and 'staging' namespaces
+  targetNamespaces:
+    - dev
+    - staging
+
+  # Protect resources with these labels
+  protectedLabels:
+    kubewise.io/protect: "true"
+    environment: "production"
+
+  resources:
+    # Clean up ConfigMaps not used by any Pod after 3 days
+    - kind: ConfigMap
+      maxAgeHours: 72
+
+    # Clean up Secrets not referenced after 7 days
+    - kind: Secret
+      maxAgeHours: 168
+
+    # Clean up unmounted PVCs after 3 days
+    - kind: PersistentVolumeClaim
+      maxAgeHours: 72
+
+    # Clean up completed/failed Jobs after 24 hours
+    - kind: Job
+      maxAgeHours: 24
+
+    # Clean up old ReplicaSets with 0 replicas after 3 days
+    - kind: ReplicaSet
+      maxAgeHours: 72
